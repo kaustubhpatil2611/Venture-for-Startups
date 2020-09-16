@@ -1,0 +1,17 @@
+#myform{
+	margin-top: 2em;
+	color: white;
+	background-color: #993366;
+	border-radius: 5px;
+}
+
+
+#myform button{
+	border-radius: 15px;
+	padding-right: 30px;
+	padding-left: 30px;
+}
+
+footer{
+	background-color: #ffb3b3;
+}
