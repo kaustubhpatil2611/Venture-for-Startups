@@ -5,6 +5,9 @@
 	border-radius: 5px;
 }
 
+.container{
+  background-attachment: #b30059;
+}
 
 #myform button{
 	border-radius: 15px;
@@ -12,8 +15,49 @@
 	padding-left: 30px;
 }
 
+.postidea {
+    margin-top: 5%;
+}
+
+#postideabtn{
+margin-left: 14%;
+}
+
+#newideabtn {
+    margin-left: 2%;
+}
+
+#viewideabtn {
+    margin-left: 3%;
+}
+
+#ideaform{
+
+  margin-bottom: 5%;
+  margin-top: 4%;
+  
+}
+
+#formdisplaytoggle{
+  display: none;
+}
+
+.investorlist {
+    margin-top: 5%;
+}
+
+.invest {
+    margin-left: 3%;
+    margin-top: 5%;
+}
+
+#WantInvest {
+    text-align: center;
+}
+
 footer{
-	background-color: #ffb3b3;
+  background-color: #ffb3b3;
+  
 }
 
 /* Startup.PNG */
