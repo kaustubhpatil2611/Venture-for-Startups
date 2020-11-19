@@ -4,10 +4,10 @@
                 <div class="col-4 offset-1 col-sm-2">
                     <h5>Links</h5>
                     <ul class="list-unstyled">
-                        <li><a href="home.html" id="home1">Home</a></li>
-                        <li><a href="startup.html" id="register1">StartUp</a></li>
-                        <li><a href="investor.html" id="show1">Investor</a></li>
-                        <li><a href="customer.html" id="show1">Customer</a></li>
+                        <li><a href="home.php" id="home1">Home</a></li>
+                        <li><a href="startuphome.php" id="register1">StartUp</a></li>
+                        <li><a href="investorhome.php" id="show1">Investor</a></li>
+                        <li><a href="customerhome.php" id="show1">Customer</a></li>
                     </ul>
                 </div>
                 <div class="col-7 col-sm-5">

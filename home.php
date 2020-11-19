@@ -1,7 +1,10 @@
 ﻿<?php require('header.php'); 
 ?>
         <br><br>
-
+        <div class="alert alert-info alert-dismissible fade show">
+            <strong>Welcome To Venture For Startups!</strong>
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+        </div>
 <!-- STARTUP DIVISION-->
         <div class="row row-content align-items-center" style="background-color:     #bb99ff;">
                    <div class=" col-12 col-md-7">

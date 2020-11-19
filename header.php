@@ -12,22 +12,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     
     <script>
-        //To generate Number of Founders TEXT BOXes
-        function generate() {
-
-            var a = parseInt(document.getElementById("numberfounder").value);
-            var ch = document.getElementById("ch");
-
-            for (i = 0; i < a; i++) {
-                var p = document.createElement("p");
-                var input = document.createElement("input");
-                
-                ch.appendChild(input);
-                ch.appendChild(p);
-                
-            }
-        }
-
+        
      
 
       function togglefunc() {
@@ -61,9 +46,7 @@
                 <li class="nav-item"><a class="nav-link" href="customerhome.php" id="home"><span class="fa fa-users fa-lg"></span> Customer</a></li>
                 
             </ul>
-            <ul class="navbar-nav ml-auto ">
-                <li class="nav-item " style="float:left;"><a class="nav-link" href="logout.php" id="home"><span class="fa fa-sign-out fa-lg"></span>Log Out</a></li>
-            </ul>
+            
         </div>
     </nav>
     <div  class="container" style="z-index:1000;">

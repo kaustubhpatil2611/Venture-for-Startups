@@ -1,5 +1,6 @@
 <?php
 session_start();
+require_once 'sendEmails.php';
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -31,16 +32,21 @@ if(array_key_exists("submit", $_POST)){
         $name = $_POST['name'];
         $email = mysqli_real_escape_string($link, $_POST['email']);
         $type=$_POST['stype'];
+        $id=$_SESSION['sid'];
         //echo "$briefidea";
     
 
-    $query = "INSERT INTO postidea (name,email,briefidea,type) VALUES ('$name','$email','$briefidea','$type')";
+    $query = "INSERT INTO postidea (startupid,name,email,briefidea,type) VALUES ('$id','$name','$email','$briefidea','$type')";
 
           
             if(mysqli_query($link, $query)){
                     //echo "Idea Posted successfully.";
                 $msg = "Idea Posted successfully.";
                     //header("Location: startuphome.php");
+                    echo '<div class="alert alert-success alert-dismissible fade show">
+                <strong>Success!</strong> Idea posted for funds successfully!
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>';
                 } 
             else{
                 echo "ERROR: Could not able to execute <br>$query. <br>" . mysqli_error($link);
@@ -71,17 +77,21 @@ if(array_key_exists("submit-l", $_POST)){
         $name = $_POST['name'];
         $stype = $_POST['stype'];
         $url = mysqli_real_escape_string($link, $_POST['link']);
-        
+        $id=$_SESSION['sid'];
         //echo "$briefidea";
     
 
-    $query = "INSERT INTO postad (name,link,info,type) VALUES ('$name','$url','$briefidea','$stype')";
+    $query = "INSERT INTO postad (startupid,name,link,info,type) VALUES ('$id','$name','$url','$briefidea','$stype')";
 
           
             if(mysqli_query($link, $query)){
                     //echo "Idea Posted successfully.";
                 $msg = "Idea Posted successfully.";
                     //header("Location: startuphome.php");
+                echo '<div class="alert alert-success alert-dismissible fade show">
+                <strong>Success!</strong> Idea posted for advertisement successfully!
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>';
                 } 
             else{
                 echo "ERROR: Could not able to execute <br>$query. <br>" . mysqli_error($link);
@@ -91,16 +101,19 @@ if(array_key_exists("submit-l", $_POST)){
 ?>
 
 
-<?php require('header.php'); 
+<?php require('header2.php'); 
 ?>
 
 <?php
-    //if(isset($_SESSION['s_is_auth'])){
-    //if($_SESSION['s_is_auth']){?>
-        You are Logged IN !!!
-        <h3>Startup Profile</h3>
-
-        
+    if(isset($_SESSION['s_is_auth'])){
+        if($_SESSION['s_is_auth']){
+            if($_SESSION['verified']){?>
+    
+        <div class="alert alert-success alert-dismissible fade show">
+            <strong>Success!</strong> You are logged In!
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+        </div>
+        <h3 class="text-primary f-w-100">Startup Profile</h3>
         <div class="postidea">
             
             <!-- newideabtn  -->
@@ -121,37 +134,25 @@ if(array_key_exists("submit-l", $_POST)){
 
                 <div class="form-group">
 
-                   <!--  <label for="numberfounder" class="col-form-label col-12">Number of Founders</label>
-                        <div class="col-12 col-md-5 ">
-                            <input type="text" id="numberfounder"/>
-                            <input type="button" value="?" onclick="generate()" />
-                        </div>
-                    
-                    
-                   
-                    <div id="ch">
-                        
-                    </div> -->
-
                     <label for="firstname" class="col-form-label col-12 col-md-1 ">Name</label>
                         <div class="col-12 col-md-5 ">
-                            <input type="text" class="form-control" id="firstname" name="name" placeholder="Name">
+                            <input type="text" class="form-control" id="firstname" name="name" placeholder="Name" required>
                         </div>
 
                     <label for="firstname" class="col-form-label col-12 col-md-1 ">Email</label>
                             <div class="col-12 col-md-5 ">
-                                <input type="email" class="form-control" id="firstname" name="email" placeholder="Enter your Email">
+                                <input type="email" class="form-control" id="firstname" name="email" placeholder="Enter your Email" required>
                             </div>
 
                     <label for="ideatextbox" class="col-form-label col-12"> Describe your Idea </label>
 
                     <div class="col-12 col-md-5 ">
-                        <textarea class="form-control" id="ideatextbox" rows="3" name="briefidea"></textarea>
+                        <textarea class="form-control" id="ideatextbox" rows="3" name="briefidea" required></textarea>
                     </div>
 
                     <label for="firstname" class="col-form-label col-12 col-md-2 ">Startup Type</label>
                             <div class="col-12 col-md-5 ">
-                                <input type="text" class="form-control" id="" name="stype" placeholder="Enter startup category">
+                                <input type="text" class="form-control" id="" name="stype" placeholder="Enter startup category" required>
                             </div>
                 </div>
 
@@ -169,23 +170,23 @@ if(array_key_exists("submit-l", $_POST)){
 
                     <label for="firstname" class="col-form-label col-12 col-md-1 ">Name</label>
                         <div class="col-12 col-md-5 ">
-                            <input type="text" class="form-control" id="firstname" name="name" placeholder="Name">
+                            <input type="text" class="form-control" id="firstname" name="name" placeholder="Name" required>
                         </div>
 
                     <label for="firstname" class="col-form-label col-12 col-md-1 ">Link</label>
                             <div class="col-12 col-md-5 ">
-                                <input type="text" class="form-control" id="firstname" name="link" placeholder="Enter your website URL">
+                                <input type="text" class="form-control" id="firstname" name="link" placeholder="Enter your website URL" required>
                             </div>
 
                     <label for="ideatextbox" class="col-form-label col-12"> Describe your Idea </label>
 
                     <div class="col-12 col-md-5 ">
-                        <textarea class="form-control" id="ideatextbox" rows="3" name="briefidea"></textarea>
+                        <textarea class="form-control" id="ideatextbox" rows="3" name="briefidea" required></textarea>
                     </div>
 
                     <label for="firstname" class="col-form-label col-12 col-md-2 ">Startup Type</label>
                             <div class="col-12 col-md-5 ">
-                                <input type="text" class="form-control" id="" name="stype" placeholder="Enter startup category">
+                                <input type="text" class="form-control" id="" name="stype" placeholder="Enter startup category" required>
                             </div>
                 </div>
 
@@ -202,26 +203,7 @@ if(array_key_exists("submit-l", $_POST)){
 
 
 <!-- To Display Error(s) in HTML ,if generated -->
-<?php if ($error != "" || $msg != "") { ?>
- <div id="error" class="p-3 mb-2 bg-danger text-white">
-    
-        <?php 
-        echo "$error";
-        echo "$msg"; 
-        ?>
 
-    
-    </div>   
-<?php } else { ?>
-    <div id="error">
-    
-        <?php 
-        echo "$error"; 
-        ?>
-
-    
-    </div>    
-<?php } ?>
 
  
         
@@ -236,7 +218,7 @@ if(array_key_exists("submit-l", $_POST)){
 
             <h2 class="text-primary f-w-100">Do you want to Raise Funds?</h2>
             <p>
-                Here The list of investors will be displayed from investor table database
+                <h5>Here is a list of investors you can contact to!</h5>
             </p>
             <?php
             if(1){
@@ -288,16 +270,34 @@ if(array_key_exists("submit-l", $_POST)){
 
 <!-- END of container class -->
     
-<?php /*}
+<?php }
+            else
+            {
+                echo '<div class="alert alert-warning alert-dismissible fade show">
+                <strong>Alert!</strong> You have not verified your email ID, please verify it by using link send to your mail!
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                </div>';
+            }
+            }
             else{
-                echo "<h2>Please Login as Startup To Continue!!</h2><hr>";
+                echo '<div class="alert alert-warning alert-dismissible fade show">
+                <strong>Alert!</strong> Please Login as Startup To Continue!!!
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                </div>';
                 echo '<a href="startup.php?reg=login" class="btn btn-warning">Log In</a><br><br>';
             }}
             else{
-                echo "<h2>Please Login as Startup To Continue!!</h2><hr>";
+                echo '<div class="alert alert-warning alert-dismissible fade show">
+                <strong>Alert!</strong> Please Login as Startup To Continue!!!
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                </div>';
                 echo '<a href="startup.php?reg=login" class="btn btn-warning">Log In</a><br><br>';
-            }*/
+            }
             ?>
-            </div>
+            
+    <div class="row">
+            <br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    </div>  
+    </div>
 <?php require('footer.php'); 
 ?>

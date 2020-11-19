@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -27,7 +27,7 @@ $msg = "";
 
 <?php
 
-$sql = "DELETE FROM postidea WHERE id='" . $_GET["id"] . "'";
+$sql = "DELETE FROM postidea WHERE ideaid='" . $_GET["ideaid"] . "'";
 if(mysqli_query($link,$sql)){
     $msg .= "Record Deleted Successfully !!!";
 }
@@ -41,7 +41,10 @@ if(mysqli_query($link,$sql)){
     
         <?php 
         echo "$error";
-        echo "$msg"; 
+        echo '<div class="alert alert-info alert-dismissible fade show">
+                    <strong>Success!</strong> Idea deleted successfully!
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                </div>'; 
         ?>
 
      

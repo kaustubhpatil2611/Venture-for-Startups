@@ -21,15 +21,19 @@ $msg = "";
 ?>
 
 
-<?php require('header.php'); 
+<?php require('header2.php'); 
 ?>
 <?php
     if(isset($_SESSION['investor_is_auth'])){
-    if($_SESSION['investor_is_auth']){?>
+    if($_SESSION['investor_is_auth']){
+        if($_SESSION['verified']){?>
 
-        <!--You are Logged IN !!!-->
+        <div class="alert alert-success alert-dismissible fade show">
+            <strong>Success!</strong> You are logged In!
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+        </div>
         
-        <h3>Investor Profile >> Investor Name</h3>
+        <h3 class="text-primary f-w-100">Investor Profile</h3>
         <hr style="color:purple;">
         <div class="invest">
             
@@ -120,16 +124,33 @@ $msg = "";
 <!-- END of container class -->
 
         <?php }
+            else
+            {
+                echo '<div class="alert alert-warning alert-dismissible fade show">
+                <strong>Alert!</strong> You have not verified your email ID, please verify it by using link send to your mail!
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                </div>';
+            }
+            }
             else{
-                echo "<h2>Please Login as an Investor To Continue!!</h2><hr>";
+                echo '<div class="alert alert-warning alert-dismissible fade show">
+                <strong>Alert!</strong> Please Login as an Investor To Continue!!!
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                </div>';
                 echo '<a href="investor.php?reg=login" class="btn btn-warning">Log In</a><br><br>';
             }}
             else{
-                echo "<h2>Please Login as Investor To Continue!!</h2><hr>";
+                echo '<div class="alert alert-warning alert-dismissible fade show">
+                <strong>Alert!</strong> Please Login as an Investor To Continue!!!
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                </div>';
                 echo '<a href="investor.php?reg=login" class="btn btn-warning">Log In</a><br><br>';
             }
         ?>
-    </div>
-       
+    
+    <div class="row">
+            <br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+</div>  
+</div>   
 <?php require('footer.php'); 
 ?>

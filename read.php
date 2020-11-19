@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -27,12 +27,15 @@ $msg = "";
 <?php
 
 // Attempt select query execution
-        $sql = "SELECT * FROM postidea WHERE 1";//cid=$_SESSION['cid']";
+        echo '<div class="row"><br/><br/><br/><h3>Your Posted Ideas</h3><hr style="border-top: 1px solid #9900cc;"/></div>';
+        $id=$_SESSION['sid'];
+        $sql = "SELECT * FROM postidea WHERE startupid = '$id'";
         if($result = mysqli_query($link, $sql)){
             if(mysqli_num_rows($result) > 0){
                 echo "<table class='table table-bordered table-striped'>";
                     echo "<thead>";
                         echo "<tr>";
+                            echo "<th>Idea ID</th>";
                             echo "<th>Name</th>";
                             echo "<th>Email</th>";
                             echo "<th>Idea</th>";
@@ -44,16 +47,17 @@ $msg = "";
                     echo "<tbody>";
                     while($row = mysqli_fetch_array($result)){
                         echo "<tr>";
+                            echo "<td>" . $row['ideaid'] . "</td>";
                             echo "<td>" . $row['name'] . "</td>";
                             echo "<td>" . $row['email'] . "</td>";
                             echo "<td>" . $row['briefidea'] . "</td>";
                            
                             echo "<td>";
                                 
-                                echo "<a href='edit.php?id=". $row['id'] ."' title='Update Record' data-toggle='tooltip' class='btn btn-primary'>Edit</a>";
+                                echo "<a href='edit.php?ideaid=". $row['ideaid'] ."' title='Update Record' data-toggle='tooltip' class='btn btn-primary'>Edit</a>";
 
 
-                              echo "<a href='delete.php?id=". $row['id'] ."' title='Delete Record' data-toggle='tooltip' class='btn btn-danger''>Delete</a>";
+                              echo "<a href='delete.php?ideaid=". $row['ideaid'] ."' title='Delete Record' data-toggle='tooltip' class='btn btn-danger''>Delete</a>";
                    
 
                             echo "</td>";
@@ -76,7 +80,9 @@ $msg = "";
 
 
 <button onclick="location.href = 'startuphome.php';" id="myButton" class="btn btn-info">Back</button>
-
+<div class="row">
+        <br><br><br>
+</div>
 
 <!-- To Display Error(s) in HTML ,if generated -->
 <?php if ($error != "" || $msg != "") { ?>

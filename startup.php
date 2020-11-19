@@ -1,6 +1,7 @@
-﻿<?php
+﻿
+<?php
 
-
+require_once 'sendEmails.php';
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -14,26 +15,43 @@ if (!$link) {
   die("Connection failed: " . mysqli_connect_error());
 }
 //echo "Database Connected!!!";
+?>
 
+<?php require('header.php'); 
+?>
 
+<?php
 //login page
 
 if(array_key_exists("l-submit", $_POST))
 {
     $error = "";
-    if(!$_POST['email'])
+    if(!$_POST['email'] && !$_POST['password'])
     {
-        $error .= "An email Address is required <br>";
+    echo '<div class="alert alert-danger alert-dismissible fade show">
+      <strong>Warning!</strong> Please enter an email and a password.
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      </div>';
     }
-    if(!$_POST['password'])
+    else if(!$_POST['email'] )
     {
-        $error.= "Please enter your password! <br>";
+    echo '<div class="alert alert-danger alert-dismissible fade show">
+      <strong>Warning!</strong> Please enter an email.
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      </div>';
+    }
+    else if(!$_POST['password'])
+    {
+        echo '<div class="alert alert-warning alert-dismissible fade show">
+      <strong>Warning!</strong> Please enter password
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      </div>';
     }
     else
     {
         $email=$_POST['email'];
         $password=$_POST['password'];
-        $sql = "SELECT password from startupusers WHERE email = '$email'";
+        $sql = "SELECT * from startupusers WHERE email = '$email'";
         $result=mysqli_query($link,$sql);
         if(mysqli_num_rows($result)==1)
         {
@@ -43,10 +61,18 @@ if(array_key_exists("l-submit", $_POST))
                 //not done yet
                 //$_SESSION['id']=??;
                 session_start();
-                $_SESSION['sid']=$row['sid'];
+                $_SESSION['sid']=$row['id'];
                 $_SESSION['s_is_auth']=true;
+                $_SESSION['verified']=$row['verified'];
                 header("Location: startuphome.php");
 
+            }
+            else
+            {
+                echo '<div class="alert alert-warning alert-dismissible fade show">
+                <strong>Warning!</strong> Password is incorrect!
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                </div>';
             }
         }
        
@@ -58,42 +84,153 @@ $error = "";
 if(array_key_exists("submit", $_POST)){
 //if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     //$flag=validateform();
-    if(1){
-    $error = "";
-    //name
-    $name=$_POST['name'];
-    $email=$_POST['email'];
-    $phone=$_POST['phone'];
-    $startupname=$_POST['startupname'];
-    $startuptype=$_POST['startuptype'];
-    $location=$_POST['location'];
-    $sdescription=$_POST['sdescription'];
-    $password=$_POST['password'];
+ 
+    $errors=array('email'=>'','name'=>'','phone'=>'','startupname'=>'','startuptype'=>'','location'=>'','sdescription'=>'','password'=>'');
+    if(isset($_POST['submit'])){
 
-    echo "please tell about error";
-        //header("Location: home.php");
-            $name = $_POST['name'];
-            $email = mysqli_real_escape_string($link, $_POST['email']);
-            $phone = $_POST['phone'];
-            $password = mysqli_real_escape_string($link, $_POST['password']);
+    if(empty($_POST['email'])){
+      $errors['email']='Email is required <br />';
+    }else{
+      $email= $_POST['email'];
+      if(!preg_match('/^[a-zA-Z0-9]([a-zA-Z0-9][\.\+\-\_\!\#\$\%\&\'\*\+\-\/\=\?\^\_\`\{\|]{0,1}){0,62}([a-zA-Z0-9][\@])([\a-zA-Z0-9\-]{1,6}[\.]){1,3}([a-zA-Z]){2,4}$/',$email))
+      {
+        $errors['email']='Email must be the valid email address <br />';
+      }
+    }
 
-            $query = "INSERT INTO startupusers (name,email,phone,password,startupname,startuptype,location,sdescription) VALUES
-            ('$name','$email','$phone','$password','$startupname','$startuptype','$location','$sdescription')";
+    if(empty($_POST['name'])){
+      $errors['name']='Name is required <br />';
+    }else{
+      $name=$_POST['name'];
+      if(!preg_match('/^[a-zA-Z\s]+$/',$name)){
+        $errors['name']= 'Name must be letters and spaces only <br/>';
+      }
+    }
 
-          
-            if(mysqli_query($link, $query)){
-                    //echo "Records added successfully.";
-                    header("Location: startuphome.php");
-                } 
-            else{
-                echo "ERROR: Could not able to execute <br>$query. <br>" . mysqli_error($link);
-            }
+    if(empty($_POST['phone'])){
+      $errors['phone']='Phone number is required <br />';
+    }else{
+      $phone= $_POST['phone'];
+      if(!preg_match('/^(\+91)?[6|7|8|9]{1}[0-9]{9}$/',$phone)){
+        $errors['phone']='Please type proper phone number';
+      }
+    }
+
+    if(empty($_POST['startupname'])){
+        $errors['startupname']='Startup name is required <br />';
+      }else{
+        $startupname=$_POST['startupname'];
+        if(!preg_match('/^[a-zA-Z\s]+$/',$startupname)){
+          $errors['startupname']= 'Name must be letters and spaces only <br/>';
+        }
+      }
     
+    if(empty($_POST['startuptype'])){
+        $errors['startuptype']='Startup type is required <br />';
+      }else{
+        $startuptype=$_POST['startuptype'];
+        if(!preg_match('/^[a-zA-Z\s]+$/',$startuptype)){
+          $errors['startuptype']= 'Name must be letters and spaces only <br/>';
         }
-        else{
-            echo "Error, not submitted";
-        }
+      }
 
+    if(empty($_POST['location'])){
+        $errors['location']='Location is required <br />';
+      }else{
+        $location=$_POST['location'];
+        if(!preg_match('/^[a-zA-Z\s]+$/',$location)){
+          $errors['location']= 'Enter valid location <br/>';
+        }
+      }
+    if(empty($_POST['sdescription'])){
+        $errors['sdescription']='Description is required <br />';
+      }else{
+        $sdescription=$_POST['sdescription'];
+        
+      }
+    if(empty($_POST['password'])){
+        $errors['password']= "A Password is Required <br/>";
+    }
+
+    else if(empty($_POST['confirmpassword'])){
+        $errors['password']= "Confirm your Password <br>";
+    }
+
+    else if($_POST['confirmpassword']!= $_POST['password'])
+    {
+        $errors['password']="Passwords do not match <br>";
+    }
+    else{
+        $password=$_POST['password'];
+    }
+
+    if(array_filter($errors)){
+      echo '<div class="alert alert-warning alert-dismissible fade show">
+      <strong>Warning!</strong> Please enter a valid value in all the required fields before proceeding.
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      </div>';
+    }
+    else{
+        $error = "";
+        
+        $name=$_POST['name'];
+        $email=$_POST['email'];
+        $phone=$_POST['phone'];
+        $startupname=$_POST['startupname'];
+        $startuptype=$_POST['startuptype'];
+        $location=$_POST['location'];
+        $sdescription=$_POST['sdescription'];
+        $password=$_POST['password'];
+        $token = bin2hex(random_bytes(50)); // generate unique token
+        $user='startup';
+        
+
+        echo "please tell about error";
+            //header("Location: home.php");
+                $name = $_POST['name'];
+                $email = mysqli_real_escape_string($link, $_POST['email']);
+                $phone = $_POST['phone'];
+                $password = mysqli_real_escape_string($link, $_POST['password']);
+
+
+                $sql = "SELECT * FROM startupusers WHERE email='$email' LIMIT 1";
+                $result = mysqli_query($link, $sql);
+                if (mysqli_num_rows($result) > 0) {
+                    //echo "Email already exists";
+                    $error .= "Email already exists. Log In to your account";
+                }
+                else
+                {
+
+                    $query = "INSERT INTO startupusers (name,email,phone,password,startupname,startuptype,location,sdescription,token) VALUES
+                    ('$name','$email','$phone','$password','$startupname','$startuptype','$location','$sdescription','$token')";
+
+                
+                    if(mysqli_query($link, $query)){
+                            //echo "Records added successfully.";
+                            /////////////////////////////////////////////////////////////////////////////////
+                            session_start();
+                            $userid =  mysqli_insert_id($link);
+                            $_SESSION['sid'] = $userid;
+                            $_SESSION['s_is_auth']=false;
+                            $_SESSION['verified'] = false;
+                            sendVerificationEmail($email, $token,$user,$userid);
+                            echo '<div class="alert alert-success alert-dismissible fade show">
+                            <strong>Success!</strong> Email has been sent to your email id for verification. Please verify to continue and then login!
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            </div>';
+                            //header("Location: startuphome.php");
+                            //////////////////////////////////////////////////////////////////////////////////
+                            //header("Location: startup.php?reg=login");
+                        } 
+                    else{
+                        echo "ERROR: Could not able to execute <br>$query. <br>" . mysqli_error($link);
+                    }
+        
+                }
+        }
+            
+        }
 }
 
 
@@ -134,8 +271,6 @@ if(array_key_exists("submit", $_POST)){
     </div>     -->
 
 
-<?php require('header.php'); 
-?>
 
 
 
@@ -157,13 +292,13 @@ if(array_key_exists("submit", $_POST)){
                             <label for="firstname" class="col-form-label col-12 col-md-1 ">Name</label>
                             <div class="col-12 col-md-5 ">
                                 <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name">
-                                <span id="nameresult"></span>
+                                <span class="errorresult" style="color:red;"><?php if(isset($errors['name'])){echo $errors['name'];}?></span>
                             </div>
 <!-- EMAIL -->                      
                             <label for="firstname" class="col-form-label col-12 col-md-1 ">Email</label>
                             <div class="col-12 col-md-5 ">
-                                <input type="email" class="form-control" id="email" name="email" placeholder="Enter your Email">
-                                <span id="emailresult"></span>
+                                <input type="text" class="form-control" id="email" name="email" placeholder="Enter your Email">
+                                <span class="errorresult" style="color:red;"><?php if(isset($errors['email'])){echo $errors['email'];}?></span>
                             </div>
                         
                     </div>
@@ -174,7 +309,7 @@ if(array_key_exists("submit", $_POST)){
                             
                             <div class="col-8 col-md-3 ">
                                 <input type="text" class="form-control" id="phone" name="phone" placeholder="Contact number">
-                                <span id="phoneresult"></span>
+                                <span class="errorresult" style="color:red;"><?php if(isset($errors['phone'])){echo $errors['phone'];}?></span>
                                 
                             </div>
                         
@@ -188,13 +323,13 @@ if(array_key_exists("submit", $_POST)){
                             <label for="firstname" class="col-form-label col-12 col-md-1 ">Startup Name</label>
                             <div class="col-12 col-md-5 ">
                                 <input type="text" class="form-control" id="startupname" name="startupname" placeholder="Enter your Startup name">
-                                <span id="startupnameresult"></span>
+                                <span class="errorresult" style="color:red;"><?php if(isset($errors['startupname'])){echo $errors['startupname'];}?></span>
                             </div>
                             
                             <label for="firstname" class="col-form-label col-12 col-md-1 ">Type of Startup</label>
                             <div class="col-12 col-md-5 ">
                                 <input type="text" class="form-control" id="startuptype" name="startuptype" placeholder="Startup type">
-                                <span id="startuptyperesult"></span>
+                                <span class="errorresult" style="color:red;"><?php if(isset($errors['startuptype'])){echo $errors['startuptype'];}?></span>
                             </div>
                             
                     </div>
@@ -204,13 +339,13 @@ if(array_key_exists("submit", $_POST)){
                             <label for="firstname" class="col-form-label col-12 col-md-1 ">Location</label>
                             <div class="col-12 col-md-5 ">
                                 <input type="text" class="form-control" id="location" name="location" placeholder="Location">
-                                <span id="locationresult"></span>
+                                <span class="errorresult" style="color:red;"><?php if(isset($errors['location'])){echo $errors['location'];}?></span>
                             </div>
                         
                             <label for="sdescription" class="col-12 col-md-1">Description</label>
                             <div class="form-group purple-border  col-12 col-md-5">
                                 <textarea class="form-control" id="sdescription" name="sdescription" rows="3"></textarea>
-                                <span id="sdescriptionresult"></span>
+                                <span class="errorresult" style="color:red;"><?php if(isset($errors['sdescription'])){echo $errors['sdescription'];}?></span>
                             </div>                        
 
                     </div>
@@ -221,15 +356,15 @@ if(array_key_exists("submit", $_POST)){
                         
                             <label for="password" class="col-form-label col-12 col-md-1 ">Enter Password</label>
                             <div class="col-12 col-md-5 ">
-                                <input type="text" class="form-control" id="password" name="password" placeholder="Enter Password" minlength = "8" maxlength = "16">
-                                <span id="result"></span>
+                                <input type="password" class="form-control" id="password" name="password" placeholder="Enter Password" minlength = "8" maxlength = "16">
+                                <span id="result" style="color:red;"><?php if(isset($errors['password'])){echo $errors['password'];}?></span>
                             </div>
                         
                             <label for="confirmpassword" class="col-form-label col-12 col-md-1 ">Confirm Password</label>
                             <div class="col-12 col-md-5 ">
-                                <input type="text" class="form-control" id="confirmpassword" minlength = "8" maxlength = "16"
+                                <input type="password" class="form-control" id="confirmpassword" minlength = "8" maxlength = "16"
                                 name="confirmpassword" placeholder="Confirm Password">
-                                <span id="confirmpasswordresult"></span>
+                                <span id="confirmpasswordresult" style="color:red;"></span>
                             </div>
                         
                     </div>
@@ -239,12 +374,7 @@ if(array_key_exists("submit", $_POST)){
                             <input type="submit" class="btn btn-primary" name="submit" value="Sign Up">
                         </div>
 
-                        <div class="offset-1 offset-md-2">
-                        <input type='button' class="btn btn-warning" name="submit" id='validate' onclick="validateform()" value="Validate FORM" />
-                    </div>
-                        <div class="offset-1 offset-md-2">
-                            <button class="btn btn-danger" name="reset" onclick="reset()" value="Clear" >Clear</button>
-                        </div>
+                        
                     </div>
                     
                     
@@ -292,7 +422,7 @@ if(array_key_exists("submit", $_POST)){
                         
                             <label for="password" class="col-form-label col-12 col-md-1 ">Password</label>
                             <div class="col-12 col-md-5 ">
-                                <input type="text" class="form-control" id="password" name="password" placeholder="Enter Password">
+                                <input type="password" class="form-control" id="password" name="password" placeholder="Enter Password">
                             </div>
                         
                     </div>
@@ -311,8 +441,9 @@ if(array_key_exists("submit", $_POST)){
         </div>
         <div class="row">
         <div class="offset-md-4">
-            <h4><a href="startup.php?reg=signup">Dont have an account? SignUp Here</a></h4>
-            <h4><a href="test.php?reg=startup">Forgot password</a></h4>
+            <h5 align="center"><a href="startup.php?reg=signup">Dont have an account? You can SignUp Here!</a></h5>
+            <h5 align="center"><a href="test.php?reg=startup">    Forgot password</a></h5>
+            <br><br><br><br><br>
         </div>
         </div>
         </div>

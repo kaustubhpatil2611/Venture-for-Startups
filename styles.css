@@ -60,6 +60,14 @@ footer{
   
 }
 
+.errorresult{
+  color:red;
+}
+
+#errorresult{
+  color:red;
+}
+
 /* Startup.PNG */
 .ml-3, .mx-3 {
     margin-left: 0rem!important;

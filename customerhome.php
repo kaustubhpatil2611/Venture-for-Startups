@@ -20,14 +20,19 @@ $msg = "";
 
 ?>
 
-<?php require('header.php'); 
+<?php require('header2.php'); 
 ?>
 
 <?php
     if(isset($_SESSION['u_is_auth'])){
-    if($_SESSION['u_is_auth']){?>
-        You are Logged IN !!!
-        <h3>Customer Profile</h3>
+        if($_SESSION['u_is_auth']){
+            if($_SESSION['verified']){?>
+        <div class="alert alert-success alert-dismissible fade show">
+            <strong>Success!</strong> You are logged In!
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+        </div>
+        
+        <h3 class="text-primary f-w-100">Customer Profile</h3>
 
         <hr style="color:purple;">
         <div class="invest">
@@ -116,17 +121,35 @@ $msg = "";
 
 
 <!-- END of container class -->
-        <?php }
+<?php }
+            else
+            {
+                echo '<div class="alert alert-warning alert-dismissible fade show">
+                <strong>Alert!</strong> You have not verified your email ID, please verify it by using link send to your mail!
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                </div>';
+            }
+            }
             else{
-                echo "<h2>Please Login as Customer To Continue!!</h2><hr>";
-                echo '<a href="customer.php?reg=login" class="btn btn-warning">Log In</a><br><br>';
-            }}
-            else{
-                echo "<h2>Please Login as Customer To Continue!!</h2><hr>";
+                echo '<div class="alert alert-warning alert-dismissible fade show">
+                <strong>Alert!</strong> Please Login as Customer To Continue!!!
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                </div>';
                 echo '<a href="customer.php?reg=login" class="btn btn-warning">Log In</a><br><br>';
             }
-            ?>
-    </div>
-       
+        }
+            else{
+                echo '<div class="alert alert-warning alert-dismissible fade show">
+                <strong>Alert!</strong> Please Login as an Customer To Continue!!!
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                </div>';
+                echo '<a href="customer.php?reg=login" class="btn btn-warning">Log In</a><br><br>';
+            }
+        ?>
+    
+    <div class="row">
+            <br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    </div>  
+</div>   
 <?php require('footer.php'); 
 ?>
