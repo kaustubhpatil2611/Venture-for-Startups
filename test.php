@@ -83,12 +83,12 @@ if(isset($_POST['forgot']) ){
                 {
                     $row =mysqli_fetch_array($result);
                     $id=$row['id'];
-                    $mg = Mailgun::create('80a1d5a25d00e26d535128909a5b2186-2b0eef4c-18bf9bb0'); 
+                    $mg = Mailgun::create('xxxxxxxxxxxxxxxxxx'); 
     
-                    $domain = "sandboxf6429ab52af743abb07759a7e80cb6ec.mailgun.org"; 
+                    $domain = "xxxxxxxxxxxxxxxxxx.mailgun.org"; 
     
                     $mg->messages()->send($domain , [
-                    'from' => 'mailgun@sandboxf6429ab52af743abb07759a7e80cb6ec.mailgun.org',
+                    'from' => 'xxxxxxxxxxxxxxxxxx.mailgun.org',
                     'to' => ''.$email.'',
                     'subject' => 'Forgot Password!',
                     'text'=> "Use the following link for password reset:http://localhost/wt/Venture-for-Startups/resetpassword.php?user=investor&id='.$id.'&pid='.$pid.'&pkey='.$pkey.'",
@@ -153,12 +153,12 @@ if(isset($_POST['forgot']) ){
                 {
                     $row =mysqli_fetch_array($result);
                     $id=$row['uid'];
-                    $mg = Mailgun::create('80a1d5a25d00e26d535128909a5b2186-2b0eef4c-18bf9bb0'); 
+                    $mg = Mailgun::create('xxxxxxxxxxxxxxxxxx'); 
     
-                    $domain = "sandboxf6429ab52af743abb07759a7e80cb6ec.mailgun.org"; 
+                    $domain = "xxxxxxxxxxxxxxxxxx.mailgun.org"; 
     
                     $mg->messages()->send($domain , [
-                    'from' => 'mailgun@sandboxf6429ab52af743abb07759a7e80cb6ec.mailgun.org',
+                    'from' => 'xxxxxxxxxxxxxxxxxx.mailgun.org',
                     'to' => ''.$email.'',
                     'subject' => 'Forgot/Reset Password!',
                     'text'=> "Use the following link for password reset:http://localhost/wt/Venture-for-Startups/resetpassword.php?user=customer&id=$id&pid=$pid&pkey=$pkey",
@@ -190,12 +190,12 @@ if(isset($_POST['forgot']) ){
                 {
                     $row =mysqli_fetch_array($result);
                     $id=$row['id'];
-                    $mg = Mailgun::create('80a1d5a25d00e26d535128909a5b2186-2b0eef4c-18bf9bb0'); 
+                    $mg = Mailgun::create('xxxxxxxxxxxxxxxxxx'); 
     
-                    $domain = "sandboxf6429ab52af743abb07759a7e80cb6ec.mailgun.org"; 
+                    $domain = "xxxxxxxxxxxxxxxxxx.mailgun.org"; 
     
                     $mg->messages()->send($domain , [
-                    'from' => 'mailgun@sandboxf6429ab52af743abb07759a7e80cb6ec.mailgun.org',
+                    'from' => 'xxxxxxxxxxxxxxxxxx.mailgun.org',
                     'to' => ''.$email.'',
                     'subject' => 'Forgot Password!',
                     'text'=> "Use the following link for password reset:http://localhost/wt/Venture-for-Startups/resetpassword.php?user=startup&id='.$id.'&pid='.$pid.'&pkey='.$pkey.'",
