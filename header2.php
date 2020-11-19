@@ -31,7 +31,7 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-dark navbar-expand-sm fixed top" style="background-color: maroon;">
+    <nav class="navbar navbar-dark navbar-expand-sm fixed top" style="background-color:  #660066;">
         <div class="container">
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#Navbar">
                 <span class="navbar-toggler-icon"></span>
